@@ -1,0 +1,201 @@
+0.) Preperations
+1.) Quick installation
+2.) Installation alternatives
+3.) Configure options
+4.) Make alternatives
+5.) Installation prefix
+6.) Loading and unloading the driver modules
+
+
+0.) Preperations
+----------------
+
+To succesfully compile most4linux you need the following things to be installed
+on your machine:
+
+	* gcc
+	* make
+	* the Linux 2.6.x kernel headers or the Linux 2.6.x kernel source, that fits
+	  to your running kernel (/lib/modules/$(uname -r)/build must point to it)
+	* optionally an realtime extension for the Linux kernel, if you
+	  want to compile the driver with realtime support (Xenomai or RTAI)
+	* optionally ALSA enabled in your kernel, to compile ALSA support into
+	  the most4linux driver
+	* the ALSA library to compile the ALSA example provided by this package
+
+
+1.) Quick installation
+----------------------
+
+Just type
+
+    $ ./configure
+    $ make
+    $ make install
+
+to install the package.
+
+
+2.) Installation alternatives
+-----------------------------
+
+You can compile this package especially the driver in 3 different ways.
+    a.) compile the driver package for standard Linux kernel 2.6:
+        * see 1.) Quick Installation
+    b.) compile the driver package for Linux kernel 2.6 with RTAI extension:
+        $ ./configure --enable-realtime=rtai \
+        > --with-realtime-extensiondir=/usr/realtime
+        $ make 
+        $ make install
+    c.) compile the driver package for Linux kernel 2.6 with Xenomai realtime
+        extension:
+        $ ./configure --enable-realtime=xenomai \
+        > --with-realtime-extensiondir=/usr/xenomai
+        $ make
+        $ make install
+
+
+3.) Configure options
+---------------------
+
+The follwing table lists the various configure options which can be passed to 
+./configure script:
+
+Option                           |  Description
+--------------------------------------------------------------------------------------
+--prefix=DIR                     |  Specify the installation prefix for the package
+                                 |  Default: "/usr/local/most4linux"
+                                 |
+--enable-realtime=EXTENSION      |  Building driver with real-time support.
+                                 |  Possible values for EXTENSION are "disable", 
+                                 |  "xenomai" or "rtai".
+                                 |  Default: "disable"
+                                 |
+--with-realtime-extensiondir=DIR |  Specify the path to the real-time extension 
+                                 |  installation directory.
+                                 |  Default: "/usr/realtime"
+                                 |
+--with-kerneldir=DIR             |  Specify the path to the linux kernel 
+                                 |  source tree
+                                 |  Default: "/lib/modules/$(uname -r)/build"
+                                 |
+--with-alsalib=DIR               |  Specify the path to the alsa-lib 
+                                 |  installation directory.
+                                 |  Default: "/usr/local"
+                                 |
+--with-moduledir=DIR             |  Specify the path to where to install the
+                                 |  driver modules.
+                                 |  Default: "$PREFIX/modules"
+                                 |
+--enable-debug                   |  Prints debugging output in most driver and 
+                                 |  in netservices adaption library.
+                                 |  Default: disabled
+                                 |
+--enable-trace                   |  Prints trace informations in netservices 
+                                 |  adaption library.
+                                 |  Default: disabled
+                                 |
+--enable-reg_access_debug        |  Prints debug messages on all low-level 
+                                 |  register accesses.
+                                 |  This makes the driver slow, so use this 
+                                 |  with care!
+                                 |  Default: disabled
+                                 |
+--enable-ioctl_debug             |  Prints debug messages for the ioctl calls
+                                 |  Default: disabled
+                                 |
+--enable-devfunc_debug           |  Prints debug messages for the OS-8104 
+                                 |  register access.
+                                 |  Default: disabled
+                                 |
+--enable-irq_debug               |  Prints debug messages in the interrupt 
+                                 |  services routine.
+                                 |  Default: disabled
+                                 |
+--enable-rt_irq_debug            |  Same as --enable-irq_debug but for the 
+                                 |  realtime interrupt service routine.
+                                 |  Default: disabled
+                                 |
+--enable-rxbuf_debug             |  Prints debug messages for the receive 
+                                 |  buffer
+                                 |  Default: disabled
+                                 |
+--enable-txbuf_debug             |  Prints debug messages for the transmit
+                                 |  buffer
+                                 |  Default: disabled
+                                 |
+--enable-sync_debug              |  Prints debug messages in the synchronous 
+                                 |  module
+                                 |  Default: disabled
+                                 |
+--enable-nets_debug              |  Prints debug messages in the NetServices   
+                                 |  module
+                                 |  Default: disabled
+                                 |
+--enable-serial_rt_debug         |  Debugging over the serial port in realtime
+                                 |  Default: disabled
+                                 |
+--enable-alsa_debug              |  Prints debugging output in the ALSA driver
+                                 |  Default: disabled
+
+For other (standard) configure options see
+    $ ./configure --help
+
+
+4.) Make alternatives
+---------------------
+
+You can generate a doxygen documentation of the driver and the NetServices
+adaption layer library by issuing the following command:
+    $ make doc
+
+The documentation can then be found in doc/most-kernel or doc/libnsadapt
+respectivly.
+
+
+5.) Installation prefix
+-----------------------
+
+If everything compiled well and make install is finished, all kernel modules,
+example programs and the NetServices adapation layer library can be found
+in the specified installation prefix or moduledir. (see 3.) Configure options).
+
+Directory            Content
+------------------------------------------------------------------
+${prefix}/bin        example programs
+${prefix}/include    header files
+${prefix}/sbin       the scripts for (un)loading the kernel modules
+${moduledir}/        the kernel module directory
+
+
+6.) Loading and unloading the driver modules
+--------------------------------------------
+
+Following section assumes that ${install_prefix} is "/usr/local/most4linux" 
+and that the installation directory of the most4linux kernel modules is 
+"/usr/local/most4linux/modules".
+
+a.) To load the driver become root and change to /usr/local/most4linux/sbin:
+
+        $ su
+        $ cd /usr/local/most4linux/sbin
+
+b.) Now set the environment variable MOST_MODULES_DIR to the directory where 
+    the most4linux kernel modules are installed:
+
+        $ export MOST_MODULES_DIR=/usr/local/most4linux/modules
+
+c.) Now load the driver modules:
+
+        $ ./load-most-modules.sh
+
+d.) To check if all modules are loaded type:
+
+        $ lsmod | grep most
+
+e.) To unload the modules change to /usr/local/most4linux/sbin and
+    type ./unload-most-modules.sh
+        
+        $ cd /usr/local/most4linux/sbin
+        $ ./unload-most-modules.sh
+

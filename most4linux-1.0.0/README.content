@@ -1,0 +1,17 @@
+Directory                   Content
+----------------------------------------------------------------------------------
+examples/src/               4 example programs to show how most4linux can
+                            be used without the MOST NetServices API
+examples/most-nets-usp/     header files for application which want to use 
+                            most4linux without the MOST NetServices API
+
+most-kernel/                the source directory of the most4linux kernel modules
+
+libnetservices/             the MOST NetServices library and related header files
+libnetservices/src/oasis/   the source code of the MOST NetServices 
+                            (not provided by this package, see README.netservices)
+libnetservices/src/linux/   the source code of the MOST NetServices adaption layer
+                            for the Linux operating system
+
+doc/                        doxygen generated documentation of the most4linux
+                            kernel module sources and NetServices adaption layer

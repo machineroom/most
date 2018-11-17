@@ -1,0 +1,246 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as 
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+
+@page loading Loading the modules
+
+If installation has finished, use
+
+@verbatim
+ $ ./load-most-modules.sh [RTAI|Xenomai]
+@endverbatim
+
+to load all required modules. Please note that you have to supply no option if
+you want to use the normal Linux drivers (if you compiled the RTAI drivers and you
+RTAI is running, you can use the normal Linux drivers at runtime; it only registers
+for interrupt handling in RTAI, but the Linux drivers work the same way as they
+would work if compiled without RTAI support), <tt>RTAI</tt> if you use RTAI
+or <tt>Xenomai</tt> if you use Xenomai.
+
+
+@section parameters Module parameters
+
+In this section, the module parameters are documented for each module that has
+parameters.
+
+@subsection parampci most_pci
+
+<table width="100%">
+  <tr>
+    <td width="20%"><b>Paramter name</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="60%"><b>Meaning and valid values</b></td>
+    <td width="10%"><b>Default</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>disable_shared_irq</tt></td>
+    <td>bool</td>
+    <td>Don't support IRQ sharing if set to @c true</td>
+    <td>FALSE</td>
+  </tr>
+</table>
+
+@subsection paramsync most_sync (non real-time)
+
+<table width="100%">
+  <tr>
+    <td width="20%"><b>Paramter name</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="60%"><b>Meaning and valid values</b></td>
+    <td width="10%"><b>Default</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_rx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software receive buffer in frame parts (i.e. the size of the
+      buffer calculates to 2*number_of_bytes_per_frame*sw_rx_buffer_size)</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_tx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*sw_tx_buffer_size)</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_rx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*hw_rx_buffer_size)</td>
+    <td>44</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_tx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*hw_tx_buffer_size)</td>
+    <td>44</td>
+  </tr>
+</table>
+
+@subsection paramalsa most_alsa
+
+<table width="100%">
+  <tr>
+    <td width="20%"><b>Paramter name</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="60%"><b>Meaning and valid values</b></td>
+    <td width="10%"><b>Default</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>playback_offset</tt></td>
+    <td>array of int</td>
+    <td>Needed to configure which synchronous frame part is used for accessing
+      the frame. It's the same as the <tt>offset</tt> member of <tt>struct
+      frame_part</tt> used in the <tt>MOST_SYNC_SETUP_TX</tt>. <br>
+      The length is always 4 bytes.</td>
+    <td>0 for each</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>capture_offset</tt></td>
+    <td>array of int</td>
+    <td>Needed to configure which synchronous frame part is used for accessing
+      the frame. It's the same as the <tt>offset</tt> member of <tt>struct
+      frame_part</tt> used in the <tt>MOST_SYNC_SETUP_RX</tt>. <br>
+      The length is always 4 bytes.</td>
+    <td>0 for each</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>index</tt></td>
+    <td>array of int</td>
+    <td>Standard ALSA parameter, normally empty. See ALSA documentation.</td>
+    <td>ALSA default</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>id</tt></td>
+    <td>array of int</td>
+    <td>Standard ALSA parameter, normally empty. See ALSA documentation.</td>
+    <td>ALSA default</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>enable</tt></td>
+    <td>array of int</td>
+    <td>Standard ALSA parameter, normally empty. See ALSA documentation.</td>
+    <td>ALSA default</td>
+  </tr>
+</table>
+
+@subsection paramsyncrt most_sync_rt (real-time)
+
+<table width="100%">
+  <tr>
+    <td width="20%"><b>Paramter name</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="60%"><b>Meaning and valid values</b></td>
+    <td width="10%"><b>Default</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_rx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software receive buffer in frame parts (i.e. the size of the
+      buffer calculates to 2*number_of_bytes_per_frame*sw_rx_buffer_size)</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_tx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*sw_tx_buffer_size)</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_rx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*hw_rx_buffer_size)</td>
+    <td>44</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_tx_buffer_size</tt></td>
+    <td>long</td>
+    <td>Size of the software transmit buffer in frame parts (i.e. the size of the
+      buffer caolucates to 2*number_of_bytes_per_frame*hw_tx_buffer_size)</td>
+    <td>44</td>
+  </tr>
+</table>
+
+@section parametersscript Supplying the parameters to the script
+
+The script contains sensible defaults for all parameters which are higher than the
+driver default values:
+
+<table width="100%">
+  <tr>
+    <td width="20%"><b>Paramter name</b></td>
+    <td width="10%"><b>Default (NRT)</b></td>
+    <td width="10%"><b>Default (RT)</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_rx_buffer_size</tt></td>
+    <td>1000</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_rx_buffer_size</tt></td>
+    <td>1000</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>hw_tx_buffer_size</tt></td>
+    <td>1000</td>
+    <td>44100</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>sw_tx_buffer_size</tt></td>
+    <td>1000</td>
+    <td>44100</td>
+  </tr>
+</table>
+
+However, if you want to use another value, you don't have to modify the script. Just
+supply the parameter as enviroment. This means for example
+
+@verbatim
+ $ export sw_rx_buffer_size=441000
+ $ ./load-most-modules.sh
+@endverbatim
+
+if you want to use the value for more loads or simply
+
+@verbatim
+ $ sw_rx_buffer_size=441000 ./lost-most=modules.sh
+@endverbatim
+
+if you want to use the value only for a single load.
+
+Before loading, the script prints a summary where the parameters that are used for
+loading the modules are listed again.
+
+
+@todo Extend the script for ALSA parameters.
+
+
+
+*/
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */

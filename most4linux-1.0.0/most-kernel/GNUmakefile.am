@@ -1,0 +1,80 @@
+MOST_KERNEL_MAKEFILE = ${srcdir}/Makefile.kbuild
+MOST_KERNELdir = $(includedir)/most-kernel
+MOST_KERNEL_HEADERS = most-common.h \
+	most-sync.h \
+	most-base.h \
+	most-measurements.h \
+	most-netservice.h
+noinst_HEADERS = most-alsa.h \
+	most-common-rt.h \
+	most-sync-common.h \
+	most-txbuf.h \
+	rtseqlock.h \
+	usp-test.h \
+	most-constants.h \
+	most-pci.h \
+	rtmostsync.h \
+	rwsem-debug.h \
+	most-common.h \
+	most-rxbuf.h \
+	most-sync-rt.h \
+	rt-nrt.h\
+	serial-rt-debug.h
+MOST_KERNEL_SOURCES = most-alsa.c \
+	most-netservice.c \
+	most-rxbuf.c \
+	most-sync-rt-m.c \
+	rwsem-debug.c \
+	most-base.c \
+	most-pci.c \
+	most-sync-m.c \
+	most-txbuf.c \
+	serial-rt-debug.c
+
+noinst_SCRIPTS = gdbline
+MOST_SBINdir = ${sbindir}
+MOST_SBIN_SCRIPTS = load-most-modules.sh \
+	unload-most-modules.sh
+
+MOST_KERNEL_MODULES = most-alsa.ko \
+	most-base.ko \
+	most-netservice.ko \
+	most-pci.ko
+if RT_SUPPORT
+MOST_KERNEL_MODULES += most-sync-rt.ko
+else
+MOST_KERNEL_MODULES += most-sync.ko
+endif
+
+MOST_KERNEL_MODULES_MOD = 644
+
+EXTRA_DIST = $(MOST_KERNEL_MAKEFILE) $(MOST_KERNEL_SOURCES) $(MOST_SBIN_SCRIPTS) $(noinst_SCRIPTS)
+
+DEFAULT_INCLUDES = -I@abs_top_srcdir@
+
+all-local: $(libkernel_mostalsa_a_SOURCES)
+	$(MAKE) -f ${MOST_KERNEL_MAKEFILE} KERNELDIR=$(KERNELDIR) \
+								  KMOD_CFLAGS="$(KMOD_CFLAGS) \
+								  $(DEFS) \
+								  $(DEFAULT_INCLUDES)" \
+								  RT=${RT}
+clean-local:
+	$(MAKE) -f ${MOST_KERNEL_MAKEFILE} KERNELDIR=$(KERNELDIR) clean
+
+install-exec-local:
+	echo $(MODULE_INSTALL_DIR)
+	$(mkinstalldirs) $(DESTDIR)/$(MODULE_INSTALL_DIR)
+#	$(mkinstalldirs) ${sbindir}
+#	for FILE in $(SCRIPT_FILES);do \
+#		$(INSTALL_SCRIPT) $${FILE} ${sbindir}; \
+#	done
+	for FILE in $(MOST_KERNEL_MODULES);do \
+		test -f $${FILE} && $(INSTALL_SCRIPT) \
+								-m $(MOST_KERNEL_MODULES_MOD) \
+								$${FILE} \
+								$(DESTDIR)/$(MODULE_INSTALL_DIR); \
+	done
+
+uninstall-local:
+	rm -f $(DESTDIR)/$(MODULE_INSTALL_DIR)/*
+	rm -f ${sbindir}/*

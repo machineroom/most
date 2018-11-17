@@ -1,0 +1,74 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+
+@page osstest Testing the Driver
+
+This document describes how to test the driver without having a
+NetServices license from OASIS Silicon Systems.
+
+@section osstest-requirements Requirements
+
+  - 2 computers with Linux
+  - 2 MOST cards
+  - MOST cards connected with a POF (direct connection is the same as a
+    ring when only 2 communication partners are used)
+
+@section osstest-recipe Recipe
+
+  -# Load the MOST driver on both systems using
+@verbatim
+ $ cd ...../most-driver/most-kernel
+ $ ./load-most-modules.sh
+@endverbatim
+  -# On one system, start the synchronous transmission. This program
+     acts as master.
+@verbatim
+ $ cd ...../most-driver/drivertest/oss/sync-tx
+ $ ./sync-tx-master
+@endverbatim
+     After about 5-10 seconds the system should transmit synchronous
+     frames. Output messages will show that.
+  -# On the other system, start synchronous reception. This program
+     acts as slave.
+@verbatim
+ $ cd ...../most-driver/drivertest/oss/sync-rx
+ $ ./sync-rx-slave
+@endverbatim
+     After about 5-10 seconds the system should receive synchronous frames. Output
+     will show that. The output is stored in the file <tt>output0.bin</tt> in the
+     same directory.
+  -# Now cancel both programs, starting with the receiving program by pressing
+     Ctrl-c (or sending a SIGINT signal with <tt>kill</tt> or <tt>killall</tt>).
+  -# Use the output verification script to see if the received stuff
+     was correct. On the computer where the data was received execute:
+@verbatim
+ $ cd ...../measurements
+ $ . env.sh
+ $ cd ../most-driver/drivertest/sync-rx
+ $ outputverify.py -sz output0.bin
+@endverbatim
+  -# That's it
+
+*/
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */

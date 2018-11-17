@@ -1,0 +1,91 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+@defgroup alsa MOST ALSA Driver (based on the MOST Synchronous Driver)
+
+This is some kind of bridge between an ALSA sound application and MOST.
+
+@section alsa-features Features
+
+  - little endian @e and big endian
+  - once playback process and one capture process
+  - 16-bit stereo
+  - 44.1 kHz sample rate
+  - other sample formats through hwplug (see ALSA documentation)
+
+@note The driver was tested with <tt>hw_?x_buffer_size=1000</tt> and
+      <tt>sw_?x_buffer_size=44100</tt>.
+
+
+@section alsa-design Design
+
+Because the ALSA driver is only some kind of bridge between the MOST Synchronous
+Driver and ALSA applications, the implementation was done in a way so that
+not too much changes were necessary in the synchronous module. See
+@ref sync for the description how to access the synchronous modules from
+other kernel module.
+
+Basically, there were two alternatives keept in mind how the goal could be
+achieved:
+ 
+  -# Using the silence and copy callbacks of ALSA. The disadvantage is that
+     this is not mmap()able and both functions are not allowed to sleep.
+     But the most_sync_write() and most_sync_read() @e can sleep, so it's a
+     bad idea to use this function inside these callbacks. \n\n
+     There were other drawbacks (such as how to implement the pointer callback
+     cleanly) with this approach so that it was dropped. \n\n
+  -# Using another buffer and copy the data from this buffer to the ring buffer
+     in a separate kernel thread. This sounds "oh, just another buffer", but
+     if you use mmap() in the ALSA application it doesn't use more buffers
+     than the first approach. \n\n
+     Using most_sync_read() and most_sync_write() in a kernel thread is possible
+     and this kernel thread simulates the hardware so that keeping the
+     pointer is easy.
+
+So the second approach was used. Details in the code ... <tt>:)</tt>
+
+
+@section alsa-using Using the ALSA driver
+
+To use the ALSA driver, you have to start a userspace program that configures the
+Routing Engine and that handles the NetServices. There are two programs provides 
+with the sources:
+
+  - <tt>sync-alsa-tx</tt> is used for transmission (playback)
+  - <tt>sync-alsa-rx</tt> is used for reception (capture)
+
+These programs are located in the <tt>most-driver/drivertest</tt> directory.
+After these programs are running, any ALSA or OSS sound program can be used. The
+driver has been tested with
+
+  - XMMS (ALSA Plugin)
+  - MOC  -- Music on Console (both ALSA and OSS emulation)
+  - aplay and arecord (uses ALSA)
+  - sox: play and rec (uses OSS emulation)
+
+For the setting which synchronous frames are used see the kernel parameters in
+@ref loading.
+
+*/
+
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */

@@ -1,0 +1,86 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+@defgroup base MOST Base Driver
+@defgroup pci MOST PCI Driver
+@defgroup netservice MOST NetService Driver
+@defgroup rtsync MOST Synchronous Driver (realtime, RTDM)
+@defgroup common Common functionality usable accross more modules.
+@defgroup rtcommon Common functionality for real-time drivers, additional to the RTDM.
+@defgroup rtnrt Functions to share code in real-time and non real-time context 
+*/
+
+/*!
+
+@mainpage MOST Linux Drivers (Linux and RTDM) 
+
+@section intro Introduction
+
+This modules contain a MOST driver framework for Linux. See the Diploma
+Thesis for a whole overview about the various kernel modules.
+
+
+@section req Requirements
+
+You need
+
+ - Linux kernel 2.6.14 or higher including sources
+ - gcc 3.x or 4.x to compile the modules
+ - Doxygen to build this documentation
+ - RTAI 3.3 or higher (with RTDM built and installed) if you want to use the
+   real-time drivers for RTAI
+ - Xenomai 2.1 or higher (with RTDM built) if you want to use the
+   real-time drivers for Xenomai
+ - userspace programs and libraries to use the driver
+
+@section see See also
+
+ - @ref compilation_installation
+ - @ref loading
+ - @ref osstest
+ - @ref alsa
+
+
+@section todo2 TODO
+
+- <tt>most-sync.ko</tt>, <tt>most-sync-rt.ko</tt>: If an overflow of the buffer 
+  happens (ISR receives data but cannot store it because the buffer is full), there
+  must be set a flag so that the USP application can handle the error.
+- add udev support (at the moment, static device files are used with the scripts that
+  create and remove the device files mentioned above)
+- implement <tt>select</tt>/<tt>poll</tt> system calls
+- maybe use <tt>debugfs</tt> (but currently there's no debug information there
+  although that was planned)
+- see also @ref todo
+
+@section about About this Document
+
+This document contains the source-code documentation. Just start browsing with
+the "Modules" tab on the top of this page.  The whole driver including this
+documentation is licensed in terms of GNU GPL
+(http://www.gnu.org/licenses/gpl.html).
+
+
+
+*/
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */

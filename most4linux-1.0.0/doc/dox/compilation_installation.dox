@@ -1,0 +1,183 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+
+@page compilation_installation Compilation and Installation
+
+@section inst Installation
+
+@subsection nrt Non-RTAI Drivers
+
+To install standard Linux drivers, just install the kernel sources . The
+kernel sources need to be configured. You must be able to compile modules. For
+example, on SUSE Linux, just do
+
+@verbatim
+ # cd /usr/src/linux
+ # make cloneconfig
+ # make modules_prepare
+@endverbatim
+
+Now, compile the kernel modules with
+
+@verbatim
+ $ cd /home/user/devel/.../most-kernel
+ $ make
+@endverbatim
+
+To load them, just use the supplied script <tt>load-most-modules.sh</tt> which also
+creates the required device files. To unload, use <tt>unload-most-modules.sh</tt>.
+
+
+@subsection rt RTAI Drivers
+
+You have to install RTAI before compiling the modules. If RTAI is installed, make
+sure that <tt>rtai-config</tt> is in <tt>$PATH</tt> environment. Normally, it's in
+<tt>/usr/realtime</tt> so you have to
+
+@verbatim
+PATH=/usr/realtime/bin:$PATH
+export PATH
+@endverbatim
+
+if you use a sh-like shell. Then, compile the MOST modules with
+
+@verbatim
+ $ cd /home/user/devel/.../most-kernel
+ $ make RT=RTAI
+@endverbatim
+
+@subsection rt_xenomai Xenomai Drivers
+
+You have to install Xenomai (built with RTDM support) before compiling the modules. If
+Xenomai is installed, make sure that <tt>xeno-config</tt> is in <tt>$PATH</tt> environment.
+Normally, it's in <tt>/usr/xenomai</tt> so you have to
+
+@verbatim
+PATH=/usr/xenomai/bin:$PATH
+export PATH
+@endverbatim
+
+if you use a sh-like shell. Then, compile the MOST modules with
+
+@verbatim
+ $ cd /home/user/devel/.../most-kernel
+ $ make RT=Xenomai
+@endverbatim
+
+
+@subsection alsaload ALSA Drivers
+
+The ALSA drivers are built with the normal Linux drivers if the kernel
+is configured with ALSA. The kernel parameter that is checked in the
+Makefile is <tt>CONFIG_SOUND</tt>. 
+
+@warning    ALSA must be configured as module that the Makefile works. 
+            If ALSA is configured in the kernel built-in, the Makefile has to be
+            changed.
+
+@note       Althought the ALSA driver provides a normal sound device, it's
+            necessary that the userspace program that allocates the channels
+            and configures the routing engines (<tt>sync-alsa-rx</tt> and
+            <tt>sync-alsa-tx</tt>) are running.
+
+See also: @ref alsa
+
+@section comp Compilation
+
+@subsection defines Defines
+
+There are some options which can be set at compile-time in the @c Makefile 
+by commenting out the appropriate lines. Following constants are valid:
+
+<table width="100%">
+  <tr>
+    <td><b>Define</b></td>
+    <td><b>Meaning</b></td>
+  </tr>
+  <tr valign="top">
+    <td><tt>REG_ACCESS_DEBUG</tt></td>
+    <td>Prints debug messages on all low-level register accesses. This makes the
+      driver slow, so use this with care!</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>IOCTL_DEBUG</tt></td>
+    <td>Prints debug messages for the <tt>ioctl</tt> calls (currently only in
+    NetServices module).</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>DEVFUNC_DEBUG</tt></td>
+    <td>Prints debug messages for the OS-8104 register access.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>IRQ_DEBUG</tt></td>
+    <td>Prints debug messages in the interrupt services routine. Please not that this
+      only works if the buffer size is reasonable high because printk() in a interrupt
+      service rotine slows down the interrupt handling dramatically.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>RT_IRQ_DEBUG</tt></td>
+    <td>Same as <tt>IRQ_DEBUG</tt> but for the real-time interrupt service routine.</td>
+  </tr>
+  <tr>
+    <td><tt>RXBUF_DEBUG</tt></td>
+    <td>Prints debug messages for the receive buffer.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>TXBUF_DEBUG</tt></td>
+    <td>Prints debug messages for the transmit buffer.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>SYNC_DEBUG</tt></td>
+    <td>Prints debug messages in the synchronous module.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>NETS_DEBUG</tt></td>
+    <td>Prints debug messages in the NetServices module.</td>
+  </tr>
+  <tr valign="top">
+    <td><tt>SERIAL_RT_DEBUG</tt></td>
+    <td>Debugging over the serial port in real-time. This is useful if the real-time
+        kernel "hangs" so that Linux never gets the chance to print the kernel
+        message on the screen or serial interface. The load script is prepared to
+        load the real-time driver which is supplied with RTAI. But please take care
+        that this only works if Linux doesn't occupy the serial port.</td>
+  </tr>
+  <tr>
+    <td><tt>MEASURING_PCI</tt></td>
+    <td>Used to measure the interrupt latency. See the diploma thesis for details
+        about the measuring method.</td>
+  </tr>
+  <tr>
+    <td><tt>MEASURING_SCHED</tt></td>
+    <td>Used to measure the scheduling latency. See the diploma thesis for details
+        about the measuring method.</td>
+  </tr>
+  <tr>
+    <td><tt>ALSA_DEBUG</tt></td>
+    <td>Prints debugging output in the ALSA driver.</td>
+  </tr>
+</table>
+
+*/
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */

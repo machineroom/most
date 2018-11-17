@@ -1,0 +1,19 @@
+most4linux provides a MOST NetServices adaption layer for the Linux operating
+system. The source code of the adaption layer can be found in
+libnetservices/src/linux. So if you have purchased a license for the full MOST
+NetServices source code you are able to use it in your applications with
+most4linux.
+
+The configure script of this package automatically detects whether a shared
+library for the MOST NetServices should be compiled or not. It checks if the
+files mns.c, cms.c and msv.c exists (of course you need all sources to compile
+it) in the libnetservices/src/smsc directory. So just copy the MOST
+NetServices sources into this directory, run configure and continue with the
+installation process:
+(--> see README.install for details)
+
+	$ cd /directory/to/most_net_services_sources
+	$ cp *.c *.h /directory/to/most4linux/libnetservices/src/smsc
+	$ ./configure
+	$ make
+	$ make install

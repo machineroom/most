@@ -1,0 +1,51 @@
+/*
+ *  Copyright(c) Siemens AG, Muenchen, Germany, 2005, 2006, 2007
+ *                           Bernhard Walle <bernhard.walle@gmx.de>
+ *                           Gernot Hillier <gernot.hillier@siemens.com>
+ *
+ * ----------------------------------------------------------------------------
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * ----------------------------------------------------------------------------
+ */
+
+/*!
+@defgroup sync MOST Synchronous Driver (non-realtime)
+
+This kernel module provides access to synchronous data. 
+For a detailed description see the Diploma Thesis.
+
+@section sync-acessing Accessing the Data
+
+Although the module was written to access the synchronous data
+from userspace, it was changed later (for the ALSA) module so that
+it's also possible to access the data from kernelspace.
+
+This was done in following way:
+
+  - To open and close the file, flip_open() and filp_close() can be used.
+    The device name is still <tt>/dev/mostsync#</tt>.
+  - To do <tt>ioctl(),</tt> <tt>read()</tt> and <tt>write()</tt> it's not
+    possible to use the userspace calls because the data resides in userspace.
+    So the functions most_sync_read(), and most_sync_write(),
+    most_sync_setup_rx() and most_sync_setup_tx() were exported which form the
+    base implementation of the system calls and can be used from kernelspace.
+
+It's not very clean but implementation was fast and the sound driver was
+a feature that was added shortly before the end of the thesis.
+
+
+*/
+
+
+/* vim: set sw=2 ts=2 et ft=doxygen nocindent tw=85: */
