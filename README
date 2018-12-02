@@ -8,6 +8,17 @@ http://www.schematics.com/project/basic-media-oriented-system-transport-most-cir
 Useful stuff
 MOST book https://books.google.co.uk/books?id=qLt4DwAAQBAJ&lpg=PA214&ots=7-CQNio1E3&dq=os8104a&pg=PA139#v=onepage&q=os8104a&f=false
 https://www.k2l.de/wp-content/uploads/2016/06/DS60001264A.pdf
+http://www.bwalle.de/docs/Diploma_Thesis.pdf
+
+E65/E66 info
+https://www.mein-bmw-rudel.de/index.php/elektronik/mediacenter-e65/
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/display-information-functions/rear-monitor/XXDkLG4
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/bus-functions/most-functions/YivFLNc
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/bus-functions/gateway-functions/control-display-supply/XB2hS56
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/audio-video-telephone-navigation-most-combination/television/image-processing/XeYOQv5
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/audio-video-telephone-navigation-most-combination/usb-port-aux-in-connection/usb-port-in-glove-box/power-supply-headunit/XXQqzrD
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/audio-video-telephone-navigation-most-combination/television/image-processing/video-module-picture-signals-output-rear-passenger-compartment/XV7kput
+https://www.newtis.info/tisv2/a/en/e66-760li-lim/wiring-functional-info/body/audio-video-telephone-navigation-most-combination/drives/dvd-changer-multimedia/XiVekhi
 
 81050 INIC
 http://ww1.microchip.com/downloads/en/DeviceDoc/PFL_OS81050_Eval_Board_V01_00_XX-1.pdf
@@ -23,4 +34,9 @@ https://www.simplemedianetworks.com/smn_wp/wp-content/uploads/2016/08/M25M-Produ
 http://ww1.microchip.com/downloads/en/DeviceDoc/UM_OptoLyzer_Professional_V02_03_XX-1.pdf
 
 
+SW
+http://most4linux.sourceforge.net/
+https://vmlemon.wordpress.com/2012/05/24/ubuntu-most4linux-1/
+https://bitbucket.org/vmlemon/most4linux-fix-attempt
+https://www.mein-bmw-rudel.de/index.php/elektronik/mediacenter-e65/os8104-und-linux
 
